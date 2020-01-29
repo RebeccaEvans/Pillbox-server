@@ -9,19 +9,21 @@ let userSchema = new mongoose.Schema({
     minlength: 1
   },
   lastname: String,
+  birthdate: Date,
   email: {
     type: String,
     required: true,
     unique: true,
     minlength: 5
   },
+  phone: String,
+  profileUrl: String,
   password: {
     type: String,
     required: true,
     minlength: 8,
     maxlength: 32
   },
-  profileUrl: String
 })
 
 // Use bcrypt to hash password
