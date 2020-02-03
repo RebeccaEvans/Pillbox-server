@@ -6,6 +6,8 @@ let expressJwt = require('express-jwt')
 let morgan = require('morgan')
 let rowdyLogger = require('rowdy-logger')
 
+const checkAuth = require('./controllers/check-auth')
+
 // Instantiate app
 let app = express()
 let rowdyResults = rowdyLogger.begin(app)
@@ -21,9 +23,13 @@ app.use('/auth', expressJwt({secret: process.env.JWT_SECRET
 }).unless({ //unless defines exceptions to the rule
   path: [
     {url: '/auth/login', methods: ['POST']},
-    {url: 'auth/signup', methods: ['POST']}
+    {url: '/auth/signup', methods: ['POST']}
   ]
 }), require('./controllers/auth'))
+
+// app.get('/profile', checkAuth, (req, res) => {
+//   console.log('profile reached with auth')
+// })
 
 app.get('*', (req, res) => {
   res.status(404).send({ message: 'Not Found' })

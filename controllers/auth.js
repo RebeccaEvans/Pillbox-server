@@ -5,7 +5,6 @@ let jwt = require('jsonwebtoken')
 
 // POST /auth/login (find and validate user; send token)
 router.post('/login', (req, res) => {
-  console.log(req.body)
   // look up user
   db.User.findOne({email: req.body.email})
   .then(user => {
@@ -13,14 +12,14 @@ router.post('/login', (req, res) => {
     if (!user || !user.password) {
       return res.status(404).send({message: 'User not found'})
     }
-    //good, now chec password
+    //good, now check password
     if (!user.isValidPassword(req.body.password)) {
       return res.status(401).send({message: 'password is incorrect'})
     }
 
     // good user - issue token
     let token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-      expiresIn: 60 //in seconds
+      expiresIn: 60*60*8 //in seconds
     })
     res.send({token})
 })
@@ -33,7 +32,6 @@ router.post('/login', (req, res) => {
 
 // POST to /auth/signup (create user; generate token)
 router.post('/signup', (req, res) => {
-  console.log(req.body)
   //look up user and make sure not a duplicate
   db.User.findOne({email: req.body.email})
     .then(user =>{
@@ -63,8 +61,12 @@ router.post('/signup', (req, res) => {
   })
 })
 
-// NOTE: User should be logged in to access this route
+//NOTE: User should be logged in to access this route
 router.get('/profile', (req, res) => {
+  if (req.user) {
+    console.log('yes, there is a user')
+  }
+  console.log(req.user)
   // The user is logged in, so req.user should have data!
   // TODO: Anything you want here!
 
@@ -72,6 +74,7 @@ router.get('/profile', (req, res) => {
   // WARNING: If you update the user info those changes will not be reflected here
   // To avoid this, reissue a token when you update user data
   res.send({ message: 'Secret message for logged in people ONLY!' })
+  console.log('profile page reached')
 })
 
 module.exports = router

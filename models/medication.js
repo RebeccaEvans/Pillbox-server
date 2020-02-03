@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-const medication = new mongoose.Schema({
+const userMedication = new mongoose.Schema({
 	name: String,
 	totalquantity: Number,
-	doseform: [],
+/* 	doseform: [],
 	numdose: Number,
 	iseveryday: Boolean,
 	daysofweek: [],
@@ -16,7 +16,7 @@ const medication = new mongoose.Schema({
 	pharmacy: String,
 	prescriber: String,
 	expiration: Date,
-	directions: String,
+	directions: String, */
 })
 
 
